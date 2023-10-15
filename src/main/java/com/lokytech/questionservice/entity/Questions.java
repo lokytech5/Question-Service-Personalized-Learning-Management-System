@@ -1,5 +1,6 @@
 package com.lokytech.questionservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -12,8 +13,9 @@ public class Questions {
     private Long questionId;
     private Long userId;
     private String content;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime timeStamp;
-    private String Topic;
+    private String topic;
     private String status;
 //    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Answers> answers;
@@ -26,7 +28,7 @@ public class Questions {
         this.userId = userId;
         this.content = content;
         this.timeStamp = timeStamp;
-        Topic = topic;
+        this.topic= topic;
         this.status = status;
     }
 
@@ -63,12 +65,13 @@ public class Questions {
     }
 
     public String getTopic() {
-        return Topic;
+        return topic;
     }
 
     public void setTopic(String topic) {
-        Topic = topic;
+        this.topic = topic;
     }
+
 
     public String getStatus() {
         return status;

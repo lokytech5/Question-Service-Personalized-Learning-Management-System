@@ -6,7 +6,9 @@ import com.lokytech.questionservice.exception.ExternalServiceException;
 import com.lokytech.questionservice.exception.UserNotFoundException;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserExistenceValidator {
 
     @Autowired
