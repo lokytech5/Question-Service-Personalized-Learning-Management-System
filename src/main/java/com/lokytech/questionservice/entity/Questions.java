@@ -1,11 +1,11 @@
 package com.lokytech.questionservice.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Entity
 public class Questions {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
@@ -15,8 +15,19 @@ public class Questions {
     private LocalDateTime timeStamp;
     private String Topic;
     private String status;
+//    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Answers> answers;
 
     public Questions() {
+    }
+
+    public Questions(Long questionId, Long userId, String content, LocalDateTime timeStamp, String topic, String status) {
+        this.questionId = questionId;
+        this.userId = userId;
+        this.content = content;
+        this.timeStamp = timeStamp;
+        Topic = topic;
+        this.status = status;
     }
 
     public Long getQuestionId() {
