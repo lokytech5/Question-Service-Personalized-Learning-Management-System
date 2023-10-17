@@ -8,12 +8,19 @@ import com.lokytech.questionservice.repository.QuestionRepository;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.service.OpenAiService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
+@Service
 public class AnswersService {
 
     private final QuestionRepository questionRepository;
     private final AnswersRepository answersRepository;
     private final OpenAiService openAiService;
+    @Autowired
+    private QuestionService questionService;
 
     public AnswersService(QuestionRepository questionRepository, AnswersRepository answersRepository, OpenAiService openAiService) {
         this.questionRepository = questionRepository;
@@ -41,6 +48,10 @@ public class AnswersService {
             answer.setQuestion(question);
             answersRepository.save(answer);
 
+
+            question.setStatus(QuestionStatus.ANSWERED.toString());
+            questionRepository.save(question);
+
             return question;
 
         } catch (Exception e){
@@ -48,4 +59,22 @@ public class AnswersService {
         }
 
     }
+
+
+    public Answers createAnswerForQuestion(Long questionId, String content) {
+        Questions question = questionService.findQuestionById(questionId);
+
+        if (question == null) {
+            // Handle error case where the question is not found.
+        }
+
+        Answers answer = new Answers();
+        answer.setQuestion(question);
+        answer.setContent(content);
+        answer.setHumanGenerated(false);
+        answer.setTimeStamp(LocalDateTime.now());
+
+        return answersRepository.save(answer);
+    }
+
 }
