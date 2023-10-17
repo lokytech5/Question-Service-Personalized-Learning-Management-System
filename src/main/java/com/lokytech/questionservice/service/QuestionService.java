@@ -38,4 +38,9 @@ public class QuestionService {
                 .orElseThrow(() -> new UserNotFoundException("User Not Found with id" + userId));
         return mapper.map(questions, QuestionsDTO.class);
     }
+
+    public Questions findQuestionEntityById(Long userId){
+        return questionRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User Not Found with id" + userId));
+    }
 }

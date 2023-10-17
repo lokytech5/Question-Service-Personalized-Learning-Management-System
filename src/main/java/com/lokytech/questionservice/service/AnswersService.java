@@ -62,7 +62,7 @@ public class AnswersService {
 
 
     public Answers createAnswerForQuestion(Long questionId, String content) {
-        Questions question = questionService.findQuestionById(questionId);
+        Questions question = questionService.findQuestionEntityById(questionId);
 
         if (question == null) {
             // Handle error case where the question is not found.
