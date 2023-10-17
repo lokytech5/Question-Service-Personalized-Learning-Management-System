@@ -1,15 +1,20 @@
 package com.lokytech.questionservice.service;
 
+import com.lokytech.questionservice.client.OpenAiClient;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
+import com.lokytech.questionservice.exception.UserNotFoundException;
 import com.lokytech.questionservice.repository.AnswersRepository;
 import com.lokytech.questionservice.repository.QuestionRepository;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.service.OpenAiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +26,10 @@ public class AnswersService {
     private final OpenAiService openAiService;
     @Autowired
     private QuestionService questionService;
+    @Value("${openai.token}")
+    private String openAiToken;
+    @Autowired
+    private OpenAiClient openAiClient;
 
     public AnswersService(QuestionRepository questionRepository, AnswersRepository answersRepository, OpenAiService openAiService) {
         this.questionRepository = questionRepository;
@@ -62,10 +71,12 @@ public class AnswersService {
 
 
     public Answers createAnswerForQuestion(Long questionId, String content) {
-        Questions question = questionService.findQuestionEntityById(questionId);
+        Questions question;
 
-        if (question == null) {
-            // Handle error case where the question is not found.
+        try{
+           question = questionService.findQuestionEntityById(questionId);
+        } catch (UserNotFoundException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
 
         Answers answer = new Answers();
