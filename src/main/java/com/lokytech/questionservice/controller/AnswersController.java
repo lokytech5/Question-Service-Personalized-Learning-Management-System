@@ -24,7 +24,7 @@ public class AnswersController {
         Questions questions = questionService.findQuestionEntityById(questionId);
 
         if (questions == null) {
-            // Handle the case where the question is not found.
+            // Handle the case where the question is not found
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
