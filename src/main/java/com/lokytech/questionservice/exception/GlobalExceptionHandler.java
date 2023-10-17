@@ -16,4 +16,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleExternalServiceError(ExternalServiceException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY); // or another appropriate HTTP status
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

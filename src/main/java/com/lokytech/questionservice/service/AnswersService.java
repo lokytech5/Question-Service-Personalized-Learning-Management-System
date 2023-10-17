@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class AnswersService {
@@ -76,7 +77,7 @@ public class AnswersService {
         Questions question;
 
         try{
-           question = questionService.findQuestionEntityById(questionId);
+            question = questionService.findQuestionEntityById(questionId);
         } catch (UserNotFoundException ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
