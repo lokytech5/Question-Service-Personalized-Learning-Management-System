@@ -1,6 +1,8 @@
 package com.lokytech.questionservice.service;
 
 import com.lokytech.questionservice.client.OpenAiClient;
+import com.lokytech.questionservice.dto.CompletionRequestDTO;
+import com.lokytech.questionservice.dto.CompletionResponseDTO;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
@@ -87,4 +89,17 @@ public class AnswersService {
 
         return answersRepository.save(answer);
     }
+
+    public String fetchAnswerFromAI(String questionContent) {
+        CompletionRequestDTO request = new CompletionRequestDTO();
+        request.setModel("gpt-3.5-turbo-instruct");
+        request.setPrompt(questionContent);
+        request.setMax_tokens(7);
+        request.setTemperature(0);
+
+        CompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
+        return response.getChoices().get(0).getText().trim();
+    }
+
+
 }
