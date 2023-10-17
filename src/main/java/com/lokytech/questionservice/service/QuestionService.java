@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class QuestionService {
@@ -38,8 +40,8 @@ public class QuestionService {
         return mapper.map(questions, QuestionsDTO.class);
     }
 
-    public Questions findQuestionEntityById(Long userId){
-        return questionRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User Not Found with id" + userId));
+    public Optional<Questions> findQuestionEntityById(Long userId){
+        return questionRepository.findById(userId);
     }
+
 }
