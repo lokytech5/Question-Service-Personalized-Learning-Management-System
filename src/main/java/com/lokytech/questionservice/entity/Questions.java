@@ -17,6 +17,9 @@ public class Questions {
     private LocalDateTime timeStamp;
     private String topic;
     private String status;
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    private List<Answers> answers;
 //    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Answers> answers;
 
