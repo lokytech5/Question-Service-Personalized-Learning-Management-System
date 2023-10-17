@@ -74,13 +74,13 @@ public class AnswersService {
 
 
     public Answers createAnswerForQuestion(Long questionId, String content) {
-        Questions question;
+        Optional<Questions> optionalQuestion = questionService.findQuestionEntityById(questionId);
 
-        try{
-            question = questionService.findQuestionEntityById(questionId);
-        } catch (UserNotFoundException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        if (!optionalQuestion.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found with id: " + questionId);
         }
+
+        Questions question = optionalQuestion.get();
 
         Answers answer = new Answers();
         answer.setQuestion(question);
