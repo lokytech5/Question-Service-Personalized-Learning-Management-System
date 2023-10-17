@@ -19,15 +19,15 @@ public class AnswersController {
     @Autowired
     QuestionService questionService;
 
-    @PostMapping("/Answers/{questionId}")
+    @PostMapping("/answers/{questionId}")
     public ResponseEntity<Answers> createAnswer(@PathVariable Long questionId){
-        Questions questions = questionService.findQuestionEntityById(questionId);
+        // This will throw an exception if the question doesn't exist, which can be caught by a ControllerAdvice to return a 404 status.
+        Questions questions = questionService.findQuestionEntityById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found with id: " + questionId));
 
-        if (questions == null) {
-            // Handle the case where the question is not found
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        String aiAnswerContent = answersService.fetchAnswerFromAI(questions.getContent());
+        Answers savedAnswer = answersService.createAnswerForQuestion(questionId, aiAnswerContent);
 
-        return null;
+        return new ResponseEntity<>(savedAnswer, HttpStatus.CREATED);
     }
 }
