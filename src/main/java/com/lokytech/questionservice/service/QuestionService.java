@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class QuestionService {
     @Autowired
@@ -27,5 +29,9 @@ public class QuestionService {
         UsersDTO user = userExistenceValidator.validateUserExists(userId);
         questions.setUserId(user.getId());
         return questionRepository.save(questions);
+    }
+
+    public List<Questions> findALlQuestions(Questions questions){
+        return questionRepository.findAll();
     }
 }
