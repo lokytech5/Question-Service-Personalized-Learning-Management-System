@@ -1,12 +1,11 @@
 package com.lokytech.questionservice.service;
 
 import com.lokytech.questionservice.client.OpenAiClient;
-import com.lokytech.questionservice.dto.CompletionRequestDTO;
+import com.lokytech.questionservice.dto.ChatCompletionRequestDTO;
 import com.lokytech.questionservice.dto.CompletionResponseDTO;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
-import com.lokytech.questionservice.exception.UserNotFoundException;
 import com.lokytech.questionservice.repository.AnswersRepository;
 import com.lokytech.questionservice.repository.QuestionRepository;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -45,7 +44,7 @@ public class AnswersService {
             // Constructing request for OpenAI
             CompletionRequest completionRequest = CompletionRequest.builder()
                     .prompt(question.getContent())
-                    .model("gpt-4")
+                    .model("gpt-3.5-turbo-instruct")
                     .build();
 
             // Sending question to open ai
@@ -92,7 +91,7 @@ public class AnswersService {
     }
 
     public String fetchAnswerFromAI(String questionContent) {
-        CompletionRequestDTO request = new CompletionRequestDTO();
+        ChatCompletionRequestDTO request = new ChatCompletionRequestDTO();
         request.setModel("gpt-3.5-turbo-instruct");
         request.setPrompt(questionContent);
         request.setMax_tokens(7);
