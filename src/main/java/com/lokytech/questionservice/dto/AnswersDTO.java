@@ -5,18 +5,18 @@ import com.lokytech.questionservice.entity.Questions;
 import java.time.LocalDateTime;
 
 public class AnswersDTO {
-    private Questions questions;
+    private QuestionsDTO questions;
     private String content;
     private Boolean isHumanGenerated;
     private LocalDateTime timeStamp;
     private String AnsweredBy;
 
-    public Questions getQuestions() {
+    public QuestionsDTO getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Questions questions) {
-        this.questions = questions;
+    public void setQuestions(QuestionsDTO question) {
+        this.questions = question;
     }
 
     public String getContent() {

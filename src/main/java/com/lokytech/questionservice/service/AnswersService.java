@@ -1,17 +1,20 @@
 package com.lokytech.questionservice.service;
 
 import com.lokytech.questionservice.client.OpenAiClient;
+import com.lokytech.questionservice.dto.AnswersDTO;
 import com.lokytech.questionservice.dto.ChatCompletionRequestDTO;
 import com.lokytech.questionservice.dto.ChatCompletionResponseDTO;
 import com.lokytech.questionservice.dto.ChatMessageDTO;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
+import com.lokytech.questionservice.exception.ResourceNotFoundException;
 import com.lokytech.questionservice.repository.AnswersRepository;
 import com.lokytech.questionservice.repository.QuestionRepository;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.service.OpenAiService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,9 @@ public class AnswersService {
     private String openAiToken;
     @Autowired
     private OpenAiClient openAiClient;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public AnswersService(QuestionRepository questionRepository, AnswersRepository answersRepository, OpenAiService openAiService) {
         this.questionRepository = questionRepository;
@@ -100,5 +106,15 @@ public class AnswersService {
 
         ChatCompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
         return response.getChoices().get(0).getMessage().getContent();
+    }
+
+    public AnswersDTO toDTO(Answers answer){
+        return modelMapper.map(answer, AnswersDTO.class);
+    }
+
+    public AnswersDTO findAnswerByQuestionId(Long questionId){
+        Answers answer = answersRepository.findByQuestionQuestionId(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Answer not found for question id: " + questionId));
+        return toDTO(answer);
     }
 }
