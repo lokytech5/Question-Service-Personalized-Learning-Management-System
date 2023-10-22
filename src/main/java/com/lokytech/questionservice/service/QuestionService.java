@@ -4,6 +4,7 @@ import com.lokytech.questionservice.client.UsersClient;
 import com.lokytech.questionservice.dto.QuestionsDTO;
 import com.lokytech.questionservice.dto.UsersDTO;
 import com.lokytech.questionservice.entity.Questions;
+import com.lokytech.questionservice.enums.QuestionStatus;
 import com.lokytech.questionservice.exception.UserNotFoundException;
 import com.lokytech.questionservice.repository.QuestionRepository;
 import com.lokytech.questionservice.validator.UserExistenceValidator;
@@ -30,6 +31,7 @@ public class QuestionService {
     public Questions saveQuestion(Questions questions, Long userId){
         UsersDTO user = userExistenceValidator.validateUserExists(userId);
         questions.setUserId(user.getId());
+        questions.setStatus(QuestionStatus.UNANSWERED);
         return questionRepository.save(questions);
     }
 
