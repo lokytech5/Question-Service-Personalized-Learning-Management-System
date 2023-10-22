@@ -23,7 +23,7 @@ public class AnswersController {
 
     @PostMapping("/generate-answer/{questionId}")
     public ResponseEntity<Answers> generateAiAnswerForQuestion(@PathVariable Long questionId){
-        // This will throw an exception if the question doesn't exist, which can be caught by a ControllerAdvice to return a 404 status.
+        // This will throw an exception if the question doesn't exist, which will be caught by my ControllerAdvice and return a 404 status.
         Questions questions = questionService.findQuestionEntityById(questionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Question not found with id: " + questionId));
 

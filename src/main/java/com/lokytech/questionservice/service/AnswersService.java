@@ -42,7 +42,7 @@ public class AnswersService {
         this.openAiService = openAiService;
     }
 
-    public Questions postQuestionsAndFetchAnswers(Questions question){
+    public Questions generateAndSaveAnswerForQuestion(Questions question){
         try{
             // Fetching answer from the Chat API
             String chatGptAnswer = fetchAnswerFromAI(question.getContent());
@@ -54,7 +54,7 @@ public class AnswersService {
             answersRepository.save(answer);
 
 
-            question.setStatus(QuestionStatus.ANSWERED.toString());
+            question.setStatus(QuestionStatus.ANSWERED);
             questionRepository.save(question);
 
             return question;
