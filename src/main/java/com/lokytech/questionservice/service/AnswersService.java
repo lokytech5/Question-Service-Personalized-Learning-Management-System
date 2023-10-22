@@ -1,10 +1,7 @@
 package com.lokytech.questionservice.service;
 
 import com.lokytech.questionservice.client.OpenAiClient;
-import com.lokytech.questionservice.dto.AnswersDTO;
-import com.lokytech.questionservice.dto.ChatCompletionRequestDTO;
-import com.lokytech.questionservice.dto.ChatCompletionResponseDTO;
-import com.lokytech.questionservice.dto.ChatMessageDTO;
+import com.lokytech.questionservice.dto.*;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
@@ -107,9 +104,14 @@ public class AnswersService {
         ChatCompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
         return response.getChoices().get(0).getMessage().getContent();
     }
+    public QuestionsDTO toQuestionDTO(Questions question){
+        return modelMapper.map(question, QuestionsDTO.class);
+    }
 
     public AnswersDTO toDTO(Answers answer){
-        return modelMapper.map(answer, AnswersDTO.class);
+        AnswersDTO answersDTO = modelMapper.map(answer, AnswersDTO.class);
+        answersDTO.setQuestions(toQuestionDTO(answer.getQuestion()));
+        return answersDTO;
     }
 
     public AnswersDTO findAnswerByQuestionId(Long questionId){
