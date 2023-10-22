@@ -76,12 +76,12 @@ public class ChatCompletionResponseDTO {
         private Object logprobs;
         private String finish_reason;
 
-        public ChatMessageDTO getMessages() {
+        public ChatMessageDTO getMessage() {
             return message;
         }
 
-        public void setMessages(ChatMessageDTO messages) {
-            this.message = messages;
+        public void setMessage(ChatMessageDTO message) {
+            this.message = message;
         }
 
         public int getIndex() {

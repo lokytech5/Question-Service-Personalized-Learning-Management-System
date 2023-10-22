@@ -81,6 +81,8 @@ public class AnswersService {
         answer.setHumanGenerated(false);
         answer.setTimeStamp(LocalDateTime.now());
 
+        answer.setAnsweredBy("OpenAI Assistant");
+
         return answersRepository.save(answer);
     }
 
@@ -97,6 +99,6 @@ public class AnswersService {
         request.setTemperature(0.7);
 
         ChatCompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
-        return response.getChoices().get(0).getMessages().getContent();
+        return response.getChoices().get(0).getMessage().getContent();
     }
 }
