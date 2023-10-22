@@ -2,7 +2,7 @@ package com.lokytech.questionservice.dto;
 
 import java.util.List;
 
-public class CompletionResponseDTO {
+public class ChatCompletionResponseDTO {
     private String id;
     private String object;
     private long created;
@@ -10,10 +10,10 @@ public class CompletionResponseDTO {
     private List<ChoiceResponseDTO> choices;
     private UsageResponseDTO usage;
 
-    public CompletionResponseDTO() {
+    public ChatCompletionResponseDTO() {
     }
 
-    public CompletionResponseDTO(String id, String object, long created, String model, List<ChoiceResponseDTO> choices, UsageResponseDTO usage) {
+    public ChatCompletionResponseDTO(String id, String object, long created, String model, List<ChoiceResponseDTO> choices, UsageResponseDTO usage) {
         this.id = id;
         this.object = object;
         this.created = created;
@@ -71,17 +71,17 @@ public class CompletionResponseDTO {
     }
 
     public static class ChoiceResponseDTO {
-        private Message;
+        private ChatMessageDTO message;
         private int index;
         private Object logprobs;
         private String finish_reason;
 
-        public String getText() {
-            return text;
+        public ChatMessageDTO getMessages() {
+            return message;
         }
 
-        public void setText(String text) {
-            this.text = text;
+        public void setMessages(ChatMessageDTO messages) {
+            this.message = messages;
         }
 
         public int getIndex() {

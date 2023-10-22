@@ -2,7 +2,7 @@ package com.lokytech.questionservice.service;
 
 import com.lokytech.questionservice.client.OpenAiClient;
 import com.lokytech.questionservice.dto.ChatCompletionRequestDTO;
-import com.lokytech.questionservice.dto.CompletionResponseDTO;
+import com.lokytech.questionservice.dto.ChatCompletionResponseDTO;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
@@ -97,7 +97,7 @@ public class AnswersService {
         request.setMax_tokens(7);
         request.setTemperature(0);
 
-        CompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
+        ChatCompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
         return response.getChoices().get(0).getText().trim();
     }
 
