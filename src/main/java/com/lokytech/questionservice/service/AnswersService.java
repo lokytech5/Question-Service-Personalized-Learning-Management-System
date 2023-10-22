@@ -3,6 +3,7 @@ package com.lokytech.questionservice.service;
 import com.lokytech.questionservice.client.OpenAiClient;
 import com.lokytech.questionservice.dto.ChatCompletionRequestDTO;
 import com.lokytech.questionservice.dto.ChatCompletionResponseDTO;
+import com.lokytech.questionservice.dto.ChatMessageDTO;
 import com.lokytech.questionservice.entity.Answers;
 import com.lokytech.questionservice.entity.Questions;
 import com.lokytech.questionservice.enums.QuestionStatus;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,17 +44,8 @@ public class AnswersService {
 
     public Questions postQuestionsAndFetchAnswers(Questions question){
         try{
-            // Constructing request for OpenAI
-            CompletionRequest completionRequest = CompletionRequest.builder()
-                    .prompt(question.getContent())
-                    .model("gpt-3.5-turbo-instruct")
-                    .build();
-
-            // Sending question to open ai
-            CompletionResult completion = openAiService.createCompletion(completionRequest);
-
-            // Processing respond
-            String chatGptAnswer = completion.getChoices().get(0).getText();
+            // Fetching answer from the Chat API
+            String chatGptAnswer = fetchAnswerFromAI(question.getContent());
 
             // Creating answer entity and saving it to database
             Answers answer = new Answers();
@@ -92,14 +86,17 @@ public class AnswersService {
 
     public String fetchAnswerFromAI(String questionContent) {
         ChatCompletionRequestDTO request = new ChatCompletionRequestDTO();
-        request.setModel("gpt-3.5-turbo-instruct");
-        request.setPrompt(questionContent);
-        request.setMax_tokens(7);
-        request.setTemperature(0);
+        request.setModel("gpt-3.5-turbo");
+
+        List<ChatMessageDTO> messages = new ArrayList<>();
+        messages.add(new ChatMessageDTO("system", "You are a helpful assistant."));
+        messages.add(new ChatMessageDTO("user", questionContent));
+
+        request.setMessages(messages);
+        request.setMax_tokens(50);
+        request.setTemperature(0.7);
 
         ChatCompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
-        return response.getChoices().get(0).getText().trim();
+        return response.getChoices().get(0).getMessages().getContent();
     }
-
-
 }
