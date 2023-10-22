@@ -71,7 +71,7 @@ public class CompletionResponseDTO {
     }
 
     public static class ChoiceResponseDTO {
-        private String text;
+        private Message;
         private int index;
         private Object logprobs;
         private String finish_reason;
