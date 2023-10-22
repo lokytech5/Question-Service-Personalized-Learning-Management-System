@@ -1,6 +1,7 @@
 package com.lokytech.questionservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lokytech.questionservice.enums.QuestionStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,9 @@ public class Questions {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime timeStamp;
     private String topic;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private QuestionStatus status;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<Answers> answers;
@@ -26,7 +29,7 @@ public class Questions {
     public Questions() {
     }
 
-    public Questions(Long questionId, Long userId, String content, LocalDateTime timeStamp, String topic, String status) {
+    public Questions(Long questionId, Long userId, String content, LocalDateTime timeStamp, String topic, QuestionStatus status) {
         this.questionId = questionId;
         this.userId = userId;
         this.content = content;
@@ -76,11 +79,11 @@ public class Questions {
     }
 
 
-    public String getStatus() {
+    public QuestionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(QuestionStatus status) {
         this.status = status;
     }
 }
