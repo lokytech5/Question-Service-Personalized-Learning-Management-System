@@ -45,8 +45,12 @@ public class AnswersService {
         this.openAiService = openAiService;
     }
 
-    public Questions generateAndSaveAnswerForQuestion(Questions question){
+    public Answers generateAndSaveAnswerForQuestionAndReturn(Long questionId){
         try{
+            // Get the question based on the provided questionId
+            Questions question = questionService.findQuestionEntityById(questionId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found with id: " + questionId));
+
             // Fetching answer from the Chat API
             String chatGptAnswer = fetchAnswerFromAI(question.getContent());
 
@@ -54,13 +58,17 @@ public class AnswersService {
             Answers answer = new Answers();
             answer.setContent(chatGptAnswer);
             answer.setQuestion(question);
+            answer.setTimeStamp(LocalDateTime.now());
+            answer.setHumanGenerated(false);
+            answer.setAnsweredBy("OpenAI Assistant");
+
             answersRepository.save(answer);
 
 
             question.setStatus(QuestionStatus.ANSWERED);
             questionRepository.save(question);
 
-            return question;
+            return answer;
 
         } catch (Exception e){
             throw new RuntimeException("Error while processing the question with OpenAI", e);
@@ -98,7 +106,7 @@ public class AnswersService {
         messages.add(new ChatMessageDTO("user", questionContent));
 
         request.setMessages(messages);
-        request.setMax_tokens(50);
+        request.setMax_tokens(100);
         request.setTemperature(0.7);
 
         ChatCompletionResponseDTO response = openAiClient.fetchAnswerFromAi(request, "Bearer " + openAiToken);
