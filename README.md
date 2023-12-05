@@ -3,6 +3,14 @@
 ## Overview
 The Question Service is a key component of the Personalized Learning Management System, designed to manage and respond to user-generated questions.This Spring Boot application designed to handle user-generated questions and provide answers. It integrates advanced features like Spring Boot Actuator for application insights, Spring Data JPA for database interactions, and OpenAI's GPT-3 Java SDK for AI-driven answers. The service also includes client-side discovery with Netflix Eureka and declarative REST client with OpenFeign, making it highly scalable and responsive. Its primary function is to manage, store, and respond to user inquiries with either AI-generated or expert human responses, facilitating an interactive and informative user experience.
 
+## Architecture
+This service is part of a larger architecture managed by our Central Service, which includes:
+- Question Service: Manages user-generated questions and AI-driven answers.
+- User Service: Manages user-related functionalities.
+- Service Registry (Eureka): Facilitates service discovery.
+
+- For more details, refer to our [Central Service repository](https://github.com/lokytech5/central-question-service).
+
 ## Maven Project Configuration
 The project is built using Maven, providing a standardized build process. Key configurations in the `pom.xml` file include:
 
@@ -83,19 +91,8 @@ Generates an AI-based answer for a specified question.
 ### GET `/answers/{questionId}`
 Retrieves the answer for a given question.
 
-## Running the Application with Docker
-The application, along with its dependencies like the service-registry and user-service, can be run using Docker and Docker Compose.
-
-### Prerequisites
-* Docker installed on your system. If not already installed, download from Docker's official site.
-* Docker Compose installed with Docker.
-
-### Steps to Run
-* Clone the Repository: Clone this repository to your local machine.
-* Navigate to the Project Directory: Change to the directory where the project is located.
-* Build and Run with Docker Compose: Execute the following command:
-  `docker-compose up`
-* This command will start all the services defined in the docker-compose.yml file, including the service-registry and user-service.
+## Setup with Central Service
+To run the Question Service as part of the integrated system, please follow the setup instructions in our [Central Service repository](https://github.com/lokytech5/central-question-service).
 
 ## Example Requests
 To facilitate the ease of use and testing, we have pre-populated the database with sample data. Below are examples of how to use the API with this data:
